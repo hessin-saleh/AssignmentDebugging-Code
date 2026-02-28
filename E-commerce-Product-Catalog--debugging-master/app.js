@@ -6,10 +6,15 @@ const productRoutes = require("./routes/productRoutes");
 const app = express();
 app.use(express.json());
 
-mongoose
-  .connect(process.env.DB_URL)
-  .then(() => console.log("DB Connected"))
-  .catch((err) => console.log(err));
+// mongoose
+//   .connect(process.env.DB_URL)
+//   .then(() => console.log("DB Connected"))
+//   .catch((err) => console.log(err));
+
+const connectDB = async () => {
+  await mongoose.connect(process.env.DB_URL);
+  console.log("DB Connected");
+};
 
 app.use("/api", productRoutes);
 
