@@ -12,10 +12,17 @@ app.use(express.json());
 //   .catch((err) => console.log(err));
 
 const connectDB = async () => {
-  await mongoose.connect(process.env.DB_URL);
-  console.log("DB Connected");
+  // Bug: Missing error handling for the database connection. If the `DB_URL` is incorrect or the database is down, it will cause an Unhandled Promise Rejection.
+  // Fix: Wrapped the database connection in a try...catch block to log the error properly and prevent silent crashes.
+  try {
+    await mongoose.connect(process.env.DB_URL);
+    console.log("DB Connected");
+  } catch (error) {
+    console.error("Database connection failed:", error.message);
+    
+  }
 };
-
+connectDB();
 app.use("/api", productRoutes);
 
 app.listen(3000, () => console.log("Server Running"));
